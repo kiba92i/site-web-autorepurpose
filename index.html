@@ -3,33 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoRepurpose - Transformez vos vidéos en Shorts viraux</title>
-    <style>
-        :root { --bg: #0f0f13; --primary: #646cff; --text: #ececec; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-        .container { max-width: 800px; padding: 20px; }
-        h1 { font-size: 3.5rem; margin-bottom: 10px; letter-spacing: -1px; }
-        h1 span { color: var(--primary); }
-        p { font-size: 1.2rem; color: #8b9bb4; margin-bottom: 40px; line-height: 1.6; }
-        .btn { background: var(--primary); color: white; text-decoration: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s; box-shadow: 0 10px 30px rgba(100, 108, 255, 0.3); }
-        .btn:hover { transform: translateY(-3px); }
-        .badge { background: #1a1a20; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; color: #10b981; border: 1px solid #2e2e3a; margin-bottom: 20px; display: inline-block; }
-        .mac-window { margin-top: 50px; background: #15151a; border-radius: 12px; border: 1px solid #2e2e3a; padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; color: #333; }
+    <title>AutoRepurpose - L'IA qui crée vos Shorts viraux</title>
+    <link rel="icon" type="image/png" href="https://autorepurpose.app/assets/favicon.png"> <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg: #050507;
+            --surface: #101014;
+            --primary: #646cff;
+            --primary-glow: rgba(100, 108, 255, 0.4);
+            --text: #ececec;
+            --text-dim: #8b9bb4;
+            --border: #2e2e3a;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); overflow-x: hidden;
+        }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; }
+        
+        /* --- NAVIGATION --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        /* C'EST ICI QUE VOUS METTEZ VOTRE LOGO */
+        .logo img { width: 32px; height: 32px; border-radius: 6px; } 
+        .logo span { color: var(--primary); }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 20px; font-size: 0.9rem; transition: color 0.2s; }
+        .nav-links a:hover { color: white; }
+
+        /* --- HERO SECTION --- */
+        .hero { text-align: center; padding: 80px 0 60px; position: relative; }
+        .badge { 
+            background: rgba(100, 108, 255, 0.1); color: #a64eff; 
+            border: 1px solid rgba(100, 108, 255, 0.2); 
+            padding: 6px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; 
+            display: inline-block; margin-bottom: 25px;
+        }
+        h1 { 
+            font-size: 4rem; line-height: 1.1; margin: 0 0 20px 0; letter-spacing: -1.5px; 
+            background: linear-gradient(180deg, #fff 0%, #aaa 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 1.3rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+        
+        /* --- BOUTON CTA --- */
+        .btn-primary {
+            background: linear-gradient(135deg, #646cff 0%, #8f44ff 100%);
+            color: white; text-decoration: none; padding: 16px 40px; border-radius: 50px;
+            font-weight: 700; font-size: 1.1rem; transition: all 0.3s;
+            box-shadow: 0 0 40px rgba(100, 108, 255, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(100, 108, 255, 0.5); }
+
+        /* --- VISUEL APP (GLOW) --- */
+        .app-showcase {
+            margin-top: 60px; position: relative;
+            perspective: 1000px;
+        }
+        .app-window {
+            background: #15151a; border-radius: 16px; border: 1px solid var(--border);
+            box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+            width: 100%; aspect-ratio: 16/10;
+            position: relative; z-index: 2; overflow: hidden;
+            /* C'EST ICI QUE VOUS METTREZ VOTRE SCREENSHOT */
+            background-image: url('assets/screenshot.jpg'); 
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* Effet de lueur derrière l'app */
+        .glow-bg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; height: 80%;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: 1; filter: blur(60px); opacity: 0.6;
+        }
+
+        /* --- BENTO GRID (FEATURES) --- */
+        .features { padding: 100px 0; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .bento-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 30px; border-radius: 16px; transition: transform 0.2s;
+        }
+        .bento-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .bento-card.wide { grid-column: span 2; }
+        .icon { width: 40px; height: 40px; background: #25252d; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary); margin-bottom: 20px; }
+        .bento-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: white; }
+        .bento-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.5; }
+
+        /* --- FOOTER --- */
+        footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-top: 50px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card.wide { grid-column: span 1; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="badge">✨ v1.0 Disponible sur macOS</div>
-        <h1>Auto<span>Repurpose</span></h1>
-        <p>L'outil ultime pour les créateurs de contenu.<br>Transformez vos vidéos longues en Shorts viraux avec sous-titres dynamiques en un clic.</p>
-        
-        <a href="#" class="btn">Télécharger pour Mac (.dmg)</a>
 
-        <div class="mac-window">
-            <span style="color:#2e2e3a; font-size: 0.9rem;">(Aperçu de l'interface ici)</span>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <img src="https://via.placeholder.com/64/646cff/ffffff?text=A" alt="Logo AutoRepurpose">
+                Auto<span>Repurpose</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Fonctionnalités</a>
+                <a href="#">Tarifs</a>
+                <a href="#">Connexion</a>
+            </div>
+        </nav>
+
+        <div class="hero">
+            <div class="badge">✨ v1.0 Disponible sur macOS</div>
+            <h1>Créez des Shorts viraux<br>en une fraction de seconde.</h1>
+            <p>Importez votre vidéo. Choisissez un style. Laissez l'IA faire le reste.<br>Sous-titres dynamiques, découpage intelligent et rendu 4K.</p>
+            
+            <a href="#" class="btn-primary">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg>
+                Télécharger pour Mac
+            </a>
+
+            <div class="app-showcase">
+                <div class="glow-bg"></div>
+                <div class="app-window">
+                    <span style="color: #555; font-size: 1.2rem;">(Placez votre capture d'écran ici)</span>
+                </div>
+            </div>
         </div>
-        
-        <p style="margin-top: 50px; font-size: 0.8rem; color: #555;">&copy; 2025 AutoRepurpose. Tous droits réservés.</p>
+
+        <div class="features">
+            <div class="section-title">
+                <h2>Tout ce dont vous avez besoin.</h2>
+                <p style="color:var(--text-dim)">Une suite d'outils puissants dans une interface simple.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <div class="bento-card wide">
+                    <div class="icon">🚀</div>
+                    <div class="bento-title">Moteur IA Ultra-Rapide</div>
+                    <div class="bento-desc">Utilise la puissance de votre Mac (M1/M2/M3) pour transcrire et incruster les sous-titres en temps réel sans file d'attente.</div>
+                </div>
+                <div class="bento-card">
+                    <div class="icon">🎨</div>
+                    <div class="bento-title">Styles Viraux</div>
+                    <div class="bento-desc">Hormozi, Beast, Neon... Appliquez les styles des plus grands créateurs en un clic.</div>
+                </div>
+                <div class="bento-card">
+                    <div class="icon">🔒</div>
+                    <div class="bento-title">100% Privé</div>
+                    <div class="bento-desc">Vos vidéos ne quittent jamais votre ordinateur. Sécurité maximale pour vos contenus.</div>
+                </div>
+                <div class="bento-card wide">
+                    <div class="icon">✂️</div>
+                    <div class="bento-title">Découpage Intelligent</div>
+                    <div class="bento-desc">L'algorithme détecte les silences et les temps forts pour créer des clips dynamiques automatiquement.</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 AutoRepurpose. Fait avec ❤️ pour les créateurs.</p>
+        </footer>
     </div>
+
 </body>
 </html>
